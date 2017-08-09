@@ -3,6 +3,7 @@ import './player.scss'
 const MINUTE_SECONDS = 60
 const HOUR_SECONDS = 60 * 60
 const GAP_TIME = 500
+const VOLUME = 0.6
 
 class Player {
   constructor (option) {
@@ -18,38 +19,40 @@ class Player {
     this._bindEvents()
 
     this.setMusic()
+    this.setVolume(VOLUME)
     if (this.audio.autoplay) this.play()
   }
 
   _setHTML (el) {
     el.innerHTML = `
-      <div class="player__wrapper">
-        <div class="player__content">
-          <div class="player__cover">
-            <img class="cover" src="">
-            <div class="player__info">
-              <div class="title player__name"></div>
-              <span class="player__author">
-                <span class="author player__author-name"></span>
-              </span>
-            </div>
-            <div class="player__progress">
-              <span class="current-time player__progress-current">00:00</span>
-              <div class="player__progress-bar">
-                <div class="progress player__progress-bar--fullfill">
-                  <span class="progress-passed player__progress-bar--passed">
-                  </span>
-                </div>
-              </div>
-              <span class="duration player__progress-whole">00:00</span>
-            </div>
+    <div class="player__wrapper">
+      <div class="player__content">
+        <div class="player__cover">
+          <img class="cover" src="">
+          <div class="player__info">
+            <div class="title player__name"></div>
+            <span class="player__author">
+              <span class="author player__author-name"></span>
+            </span>
           </div>
-          <div class="player__operations">
-            <span class="prev player__operation-prev"></span>
-            <span class="play-or-pause player__operation-play"></span>
-            <span class="next player__operation-next"></span>
+          <div class="player__progress">
+            <span class="current-time player__progress-current">00:00</span>
+            <div class="player__progress-bar">
+              <div class="progress player__progress-bar--fullfill">
+                <span class="progress-passed player__progress-bar--passed">
+                </span>
+              </div>
+            </div>
+            <span class="duration player__progress-whole">00:00</span>
           </div>
         </div>
+        <div class="player__operations">
+          <span class="prev player__operation-prev"></span>
+          <span class="play-or-pause player__operation-play"></span>
+          <span class="next player__operation-next"></span>
+        </div>
+      </div>
+      <div class="player__settings-wrapper">
         <div class="player__settings">
           <div class="player__orders">
             <span class="player__order-random"></span>
@@ -59,13 +62,16 @@ class Player {
           <span class="player__like"></span>
           <span class="player__add"></span>
           <div class="player__volume">
-            <span class="player__volume-louder"></span>
-            <span class="player__volume-liquid"></span>
-            <span class="player__volume-quiet"></span>
+            <span class="volume-max player__volume-louder"></span>
+            <span class="volume player__volume-liquid">
+              <span class="volume-measure player__volume-liquid-measure"></span>
+            </span>
+            <span class="volume-quiet player__volume-quiet"></span>
           </div>
           <span class="player__setting"></span>
         </div>
       </div>
+    </div>
     `
   }
 
@@ -80,6 +86,10 @@ class Player {
     this._durationEl = this.el.getElementsByClassName('duration')[0]
     this._progressEl = this.el.getElementsByClassName('progress')[0]
     this._progressPassedEl = this.el.getElementsByClassName('progress-passed')[0]
+    this._volumeEl = this.el.getElementsByClassName('volume')[0]
+    this._volumeMeasureEl = this.el.getElementsByClassName('volume-measure')[0]
+    this._volumeMaxEl = this.el.getElementsByClassName('volume-max')[0]
+    this._volumeQuietEl = this.el.getElementsByClassName('volume-quiet')[0]
   }
 
   _bindEvents () {
@@ -112,6 +122,23 @@ class Player {
     this.audio.onended = () => {
       this._reset()
     }
+    this._volumeEl.onclick = (e) => {
+      let targetEl = e.target
+      window.t = targetEl
+      let measure = e.offsetY
+      while (targetEl != this._volumeEl) {
+        measure += targetEl.offsetTop
+        targetEl = targetEl.parentElement
+      }
+      measure = (this._volumeEl.clientHeight - measure) / this._volumeEl.clientHeight
+      this.setVolume(measure)
+    }
+    this._volumeMaxEl.onclick = () => {
+      this.setVolume(1)
+    }
+    this._volumeQuietEl.onclick = () => {
+      this.setVolume(0)
+    }
   }
 
   _unbindEvents () {
@@ -122,6 +149,9 @@ class Player {
     this.audio.onloadeddata = null
     this.audio.ontimeupdate = null
     this.audio.onended = null
+    this._volumeEl.onclick = null
+    this._volumeMaxEl.onclick = null
+    this._volumeQuietEl.onclick = null
   }
 
   _parseTime (seconds) {
@@ -158,11 +188,17 @@ class Player {
       this.index = index
       this.audio.src = currentMusic.url
       this._coverEl.src = currentMusic.cover
+      // TODO: cover pic auto fix max width or height
       this._coverEl.style.opacity = (currentMusic.cover && currentMusic.cover.length) ? 1 : 0
       this._titleEl.innerHTML = currentMusic.title
       this._authorEl.innerHTML = currentMusic.author
     }
     this._reset()
+  }
+
+  setVolume (measure) {
+    this.audio.volume = measure
+    this._volumeMeasureEl.style.height = `${(measure * 100).toFixed(2)}%`
   }
 
   play () {
@@ -194,7 +230,10 @@ class Player {
     this.pause()
     this._unbindEvents()
 
-    this.audio = null
+    for (let key in this) {
+      delete this[key]
+    }
+
     this.el.innerHTML = ''
   }
 }

@@ -13,12 +13,22 @@
 .icon--play {
   background: url('icon/Play.png') no-repeat 60% center;
 }
+.icon--setting {
+  background: url('icon/Settings.png') no-repeat center;
+}
+.icon--volume-mid {
+  background: url('icon/Audio---mid.png') no-repeat center;
+}
+.icon--volume-low {
+  background: url('icon/Audio---low.png') no-repeat center;
+}
 
 .player__wrapper {
   position: relative;
   display: inline-block;
   font-size: 14px;
   user-select: none;
+  z-index: 1;
   .player__content {
     display: inline-block;
     width: 346px;
@@ -84,7 +94,7 @@
     overflow: hidden;
     cursor: pointer;
     &:hover {
-      box-shadow: 0 0 2px rgba(255,255,255,.8);
+      box-shadow: 0 0 1px rgba(255,255,255,.6);
     }
   }
   .player__progress-bar--passed {
@@ -147,6 +157,66 @@
       @extend .icon--play;
       width: 86px;
       height: 86px;
+    }
+  }
+  .player__settings-wrapper {
+    position: absolute;
+    top: 20px;
+    right: -56px;
+    width: 346px;
+    height: 460px;
+    border-radius: 0 10px 10px 0;
+    background-color: #444d56;
+    z-index: -1;
+  }
+  .player__settings {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 56px;
+    height: 460px;
+    overflow: hidden;
+    .player__icon {
+      width: 100%;
+      height: 46px;
+    }
+    .player__setting {
+      @extend .icon;
+      @extend .icon--setting;
+      @extend .player__icon;
+    }
+    .player__volume {
+      height: 180px;
+      background-color: rgba(255,255,255,.2);
+    }
+    .player__volume-louder {
+      @extend .icon;
+      @extend .icon--volume-mid;
+      @extend .player__icon;
+    }
+    .player__volume-quiet {
+      @extend .icon;
+      @extend .icon--volume-low;
+      @extend .player__icon;
+    }
+    .player__volume-liquid {
+      position: relative;
+      display: block;
+      height: 82px;
+      margin: 0 22px;
+      border-radius: 6px;
+      background-color: #3c454e;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .player__volume-liquid-measure {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 0;
+      border-radius: 6px;
+      background-color: rgba(0,0,0,.4);
     }
   }
 }
