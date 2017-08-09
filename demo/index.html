@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>demo</title>
+  <style media="screen">
+    body {
+      background-color: #e6eaee;
+      padding: 20px 0;
+    }
+    #player {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  </style>
+</head>
+<body>
+  <div class="player__wrapper" id="player">
+    <!-- <div class="player__content">
+      <div class="player__cover">
+        <img class="cover" src="">
+        <div class="player__info">
+          <div class="title player__name"></div>
+          <span class="player__author">
+            <span class="author player__author-name"></span>
+          </span>
+        </div>
+        <div class="player__progress">
+          <span class="current-time player__progress-current">00:00</span>
+          <div class="player__progress-bar">
+            <div class="progress player__progress-bar--fullfill">
+              <span class="progress-passed player__progress-bar--passed">
+              </span>
+            </div>
+          </div>
+          <span class="duration player__progress-whole">00:00</span>
+        </div>
+      </div>
+      <div class="player__operations">
+        <span class="prev player__operation-prev"></span>
+        <span class="play-or-pause player__operation-play"></span>
+        <span class="next player__operation-next"></span>
+      </div>
+    </div>
+    <div class="player__settings">
+      <div class="player__orders">
+        <span class="player__order-random"></span>
+        <span class="player__order-loop"></span>
+      </div>
+      <span class="player__share"></span>
+      <span class="player__like"></span>
+      <span class="player__add"></span>
+      <div class="player__volume">
+        <span class="player__volume-louder"></span>
+        <span class="player__volume-liquid"></span>
+        <span class="player__volume-quiet"></span>
+      </div>
+      <span class="player__setting"></span>
+    </div> -->
+  </div>
+  <script src="/dist/player.js" charset="utf-8"></script>
+  <script>
+    var el = document.getElementById('player')
+    var player = new Player({
+      el: el,
+      autoplay: true,
+      musics: [{
+        author: '周笔畅',
+        title: '用尽我的一切奔向你',
+        url: '用尽我的一切奔向你.mp3',
+        cover: '用尽我的一切奔向你.jpg'
+      }, {
+        author: 'GALA',
+        title: '我绝对不能失去你',
+        url: '我绝对不能失去你.mp3',
+        cover: '我绝对不能失去你.jpg'
+      }, {
+        author: '李悦君Ericaceae',
+        title: '梦伴',
+        url: '梦伴.mp3',
+        cover: '梦伴.jpg'
+      }]
+    })
+  </script>
+</body>
+</html>
